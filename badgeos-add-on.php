@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: BadgeOS Boilerplate Add-On
- * Plugin URI: http://www.learningtimes.com/
- * Description: This BadgeOS add-on automatically...
- * Author: Credly
+ * Plugin Name: WPLMS BadgeOS Add-On
+ * Plugin URI: http://www.vibethemes.com/
+ * Description: Integrated BadgeOS with WPLMS
+ * Author: VibeThemes
  * Version: 1.0.0
- * Author URI: https://credly.com/
+ * Author URI: https://vibethemes.com/
  * License: GNU AGPLv3
  * License URI: http://www.gnu.org/licenses/agpl-3.0.html
  */
@@ -20,7 +20,7 @@
  *
  * @since 1.0.0
  */
-class BadgeOS_Addon {
+class WPLMS_BadgeOS_Addon {
 
 	/**
 	 * Get everything running.
@@ -136,4 +136,4 @@ class BadgeOS_Addon {
 } /* BadgeOS_Addon */
 
 // Instantiate our class to a global variable that we can access elsewhere
-$GLOBALS['badgeos_addon'] = new BadgeOS_Addon();
+$GLOBALS['badgeos_addon'] = new WPLMS_BadgeOS_Addon();

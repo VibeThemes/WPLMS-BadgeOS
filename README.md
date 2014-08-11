@@ -1,6 +1,6 @@
-About BadgeOS Boilerplate Add-on
+About WPLMS BadgeOS Add-on
 ============
-This add-on exists to provide a template for you as you're building your own add-ons. Grab it, modify it, and get coding!
+This add-on provides the integration between BadgeOs and WPLMS.
 
 About BadgeOS
 ============
