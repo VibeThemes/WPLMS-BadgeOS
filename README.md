@@ -2,6 +2,13 @@ About WPLMS BadgeOS Add-on
 ============
 This add-on provides the integration between BadgeOs and WPLMS.
 
+REQUIREMENTS
+===================
+Minimum supported versions :
+WPLMS = 1.7.2
+BadgeOs = 1.4.2
+WordPress = 3.9
+
 About BadgeOS
 ============
 Easily create badges and set up the steps and achievements users complete to earn them. Badges are Mozilla OBI compatible and sharable via Credly. Official website: [BadgeOS.org](http://badgeos.org).
