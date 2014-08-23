@@ -48,7 +48,7 @@ class WPLMS_BadgeOS_Addon {
 	 *
 	 * @var array
 	 */
-	public $triggers = array();
+	public $triggers = array('course_activity');
 
 	/**
 	 * Actions to forward for splitting an action up
@@ -104,7 +104,7 @@ class WPLMS_BadgeOS_Addon {
 		add_action( 'badgeos_steps_ui_html_after_trigger_type',array($this, 'badgeos_bp_step_course_trigger_select'), 20, 2 );
 		add_action( 'badgeos_steps_ui_html_after_trigger_type',array($this, 'badgeos_bp_step_course_trigger_input'), 30, 2 );
 		add_filter( 'badgeos_save_step', array($this,'badgeos_wplms_save_step'), 10, 3 );
-		add_filter('badgeos_user_deserves_trigger',array($this,'badgeos_wplms_user_deserves_trigger'),20,3);
+		//add_filter('badgeos_user_deserves_trigger',array($this,'badgeos_wplms_user_deserves_trigger'),20,3);
 		add_filter( 'badgeos_get_step_requirements', array($this,'badgeos_wplms_step_requirements'), 10, 2 );
 		
 		/*== RULE ENGINE Custom Achievement Earning Rules ====*/
@@ -240,7 +240,7 @@ class WPLMS_BadgeOS_Addon {
 	// Return the requirements array
 	return $requirements;
 
-}
+	}
 
 
 	function badgeos_bp_step_course_trigger_input( $step_id, $post_id ) {
@@ -378,11 +378,6 @@ class WPLMS_BadgeOS_Addon {
 			// Do not pass go until we say you can
 			$return = false;
 
-			// Unsupported trigger
-			if ( !isset( $this->triggers[ $this_trigger ] ) ) {
-				return $return;
-			}
-
 			// Set Default Trigger as False
 			$course_activity_trigger = false;
 
@@ -400,10 +395,11 @@ class WPLMS_BadgeOS_Addon {
 				case 'badgeos_wplms_start_assignment':
 				case 'badgeos_wplms_submit_assignment':
 				case 'badgeos_wplms_unit_complete':
-					if(!in_array($course_activity,array('course_evaluated','quiz_evaluated','course_category')))
-					if(isset($args[0]) && $activity_id == $args[0]){
-						$course_activity_trigger = true;
-						$requirements[ 'count' ] = 1; // Temp fix for count
+					if(!in_array($course_activity,array('course_evaluated','quiz_evaluated','course_category'))){
+						if(isset($args[0]) && $activity_id == $args[0]){
+							$course_activity_trigger = true;
+							$requirements[ 'count' ] = 1; // Temp fix for count
+						}
 					}
 				break;
 				case 'badgeos_wplms_evaluate_course':
