@@ -47,7 +47,7 @@ $( document ).on( 'change', '.select-course-activity', function() {
 	var trigger_type = $(this);
 
 	// Show our group selector if we're awarding based on a specific group
-	if ( 'course_evaluated' == trigger_type.val() || 'quiz_evaluated' == trigger_type.val() || 'assignment_evaluated' == trigger_type.val() ) {
+	if ( 'badgeos_wplms_evaluate_course' == trigger_type.val() || 'badgeos_wplms_evaluate_quiz' == trigger_type.val() || 'badgeos_wplms_evaluate_assignment' == trigger_type.val() ) {
 		trigger_type.siblings('.input-activity-info').show();
 	} else {
 		trigger_type.siblings('.input-activity-info').hide();
