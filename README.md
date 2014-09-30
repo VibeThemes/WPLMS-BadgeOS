@@ -5,7 +5,7 @@ This add-on provides the integration between BadgeOs and WPLMS.
 REQUIREMENTS
 ===================
 Minimum supported versions :
-WPLMS = 1.7.2
+WPLMS = 1.7.2+
 BadgeOs = 1.4.2
 WordPress = 3.9
 
