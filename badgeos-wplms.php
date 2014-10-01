@@ -48,8 +48,8 @@ class WPLMS_BadgeOS_Addon {
 	 *
 	 * @var array
 	 */
-	public $triggers = array('course_activity');
-
+	public $triggers;
+	public $evaluate_triggers = array('badgeos_wplms_evaluate_course','badgeos_wplms_evaluate_quiz');
 	/**
 	 * Actions to forward for splitting an action up
 	 *
@@ -234,8 +234,8 @@ class WPLMS_BadgeOS_Addon {
 
 	// Add our new requirements to the list
 	$requirements[ 'course_activity' ] = get_post_meta( $step_id, '_badgeos_course_activity', true );
-	$requirements[ 'activity_id' ] = (int) get_post_meta( $step_id, '_badgeos_activity_id', true );
-	$requirements[ 'activity_info' ] = get_post_meta( $step_id, '_badgeos_activity_info', true );
+	$requirements[ 'activity_id' ] = (int) get_post_meta( $step_id, '_badgeos_course_activity_id', true );
+	$requirements[ 'activity_info' ] = get_post_meta( $step_id, '_badgeos_course_activity_info', true );
 
 	// Return the requirements array
 	return $requirements;
@@ -245,8 +245,8 @@ class WPLMS_BadgeOS_Addon {
 
 	function badgeos_bp_step_course_trigger_input( $step_id, $post_id ) {
 		// Loop through all of our community trigger groups
-		$current_box1 = get_post_meta( $step_id, '_badgeos_activity_id', true );
-		$current_box2 = get_post_meta( $step_id, '_badgeos_activity_info', true );
+		$current_box1 = get_post_meta( $step_id, '_badgeos_course_activity_id', true );
+		$current_box2 = get_post_meta( $step_id, '_badgeos_course_activity_info', true );
 		echo '<input type="text" name="activity_id" class="input-activity-id" placeholder="'.__('Enter ID (Blank for any)','vibe').'"  value="'.$current_box1.'">';
 		echo '<input type="text" name="activity_info" class="input-activity-info" placeholder="'.__('Enter Marks','vibe').'" value="'.$current_box2.'">';
 	}
@@ -258,7 +258,6 @@ class WPLMS_BadgeOS_Addon {
 
 			// Rewrite the step title
 			$title = $step_data[ 'course_activity_label' ];
-
 			$activity_id = $step_data[ 'activity_id' ];
 			$activity_info = $step_data[ 'activity_info' ];
 			switch($step_data[ 'course_activity' ]){
@@ -276,7 +275,7 @@ class WPLMS_BadgeOS_Addon {
 						$title = sprintf( __( 'Completed Course "%s"', 'vibe' ), get_the_title( $activity_id ) );
 					}
 				break;
-				case 'course_evaluated':
+				case 'badgeos_wplms_evaluate_course':
 					if ( empty( $activity_id ) ) {
 						$title = __( 'Marks in any Course greater than', 'vibe' );
 					}else {
@@ -297,11 +296,32 @@ class WPLMS_BadgeOS_Addon {
 						$title = sprintf( __( 'Completed Quiz "%s"', 'vibe' ), get_the_title( $activity_id ) );
 					}
 				break;
-				case 'quiz_evaluated':
+				case 'badgeos_wplms_evaluate_quiz':
 					if ( empty( $activity_id ) ) {
 						$title = __( 'Marks in any Quiz greater than', 'vibe' );
 					}else {
 						$title = sprintf( __( 'Marks in Quiz "%s" greater than "%s"', 'vibe' ), get_the_title( $activity_id ), $activity_info );
+					}
+				break;
+				case 'start_assignment':
+					if ( empty( $activity_id ) ) {
+						$title = __( 'Start any Assignment', 'vibe' );
+					}else {
+						$title = sprintf( __( 'Started Assignment "%s"', 'vibe' ), get_the_title( $activity_id ) );
+					}
+				break;
+				case 'submit_assignment':
+					if ( empty( $activity_id ) ) {
+						$title = __( 'Complete any Assignment', 'vibe' );
+					}else {
+						$title = sprintf( __( 'Completed Assignment "%s"', 'vibe' ), get_the_title( $activity_id ) );
+					}
+				break;
+				case 'badgeos_wplms_evaluate_assignment':
+					if ( empty( $activity_id ) ) {
+						$title = __( 'Marks in any Assignment greater than', 'vibe' );
+					}else {
+						$title = sprintf( __( 'Marks in Assignment "%s" greater than "%s"', 'vibe' ), get_the_title( $activity_id ), $activity_info );
 					}
 				break;
 			} 
@@ -321,7 +341,10 @@ class WPLMS_BadgeOS_Addon {
 				if ( is_array( $trigger_label ) ) {
 					$triggers = $trigger_label;
 					foreach ( $triggers as $trigger_hook => $trigger_name ) {
-						add_action( $trigger_hook, array($this,'badgeos_wplms_trigger_event'), 10, 20 );
+						if(!in_array($trigger_hook,$this->evaluate_triggers))
+							add_action( $trigger_hook, array($this,'badgeos_wplms_trigger_event'), 10, 20 );
+						else
+							add_action( $trigger_hook, array($this,'badgeos_wplms_trigger_evaluate_event'), 10, 20 );
 					}
 				}else {
 					add_action( $trigger, array($this,'badgeos_wplms_trigger_event'), 10, 20 );
@@ -338,7 +361,7 @@ class WPLMS_BadgeOS_Addon {
 	 * @since 1.0.0
 	 */
 	function badgeos_wplms_trigger_event() {
-
+		
 		// Setup all our important variables
 		global $blog_id, $wpdb;
 		$userID = get_current_user_id();
@@ -364,7 +387,29 @@ class WPLMS_BadgeOS_Addon {
 			badgeos_maybe_award_achievement_to_user( $achievement->post_id, $userID, $this_trigger, $blog_id, $args );
 		}
 	}
+	function badgeos_wplms_trigger_evaluate_event($a,$b,$userID){
+		global $blog_id, $wpdb;
+		// Grab the current trigger
+		$this_trigger = current_filter();
 
+		// Update hook count for this user
+		$new_count = badgeos_update_user_trigger_count( $userID, $this_trigger, $blog_id );
+
+		// Mark the count in the log entry
+		badgeos_post_log_entry( null, $userID, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'vibe' ), $user_data->user_login, $this_trigger, $new_count ) );
+
+		// Now determine if any badges are earned based on this trigger event
+		$triggered_achievements = $wpdb->get_results( $wpdb->prepare( "
+			SELECT post_id
+			FROM   $wpdb->postmeta
+			WHERE  meta_key = '_badgeos_course_activity'
+					AND meta_value = %s
+			", $this_trigger ) );
+
+		foreach ( $triggered_achievements as $achievement ) {
+			badgeos_maybe_award_achievement_to_user( $achievement->post_id, $userID, $this_trigger, $blog_id, $args );
+		}
+	}
 	function badgeos_wplms_user_deserves_wplms_step( $return, $user_id, $achievement_id, $this_trigger = '', $site_id = 1, $args = array() ) {
 
 		// If we're not dealing with a step, bail here
@@ -412,10 +457,10 @@ class WPLMS_BadgeOS_Addon {
 					}
 				break;
 				default: 
-					$course_activity_trigger = true;
+					$course_activity_trigger = false;
 				break;
 			}
-			return true;
+
 			if ( $course_activity_trigger ) {
 				// Grab the trigger count
 				$trigger_count = badgeos_get_user_trigger_count( $user_id, $this_trigger, $site_id );
