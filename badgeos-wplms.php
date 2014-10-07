@@ -4,7 +4,7 @@
  * Plugin URI: http://www.vibethemes.com/
  * Description: Integrates BadgeOS with WPLMS
  * Author: VibeThemes
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author URI: https://vibethemes.com/
  * License: GNU AGPLv3
  * License URI: http://www.gnu.org/licenses/agpl-3.0.html
@@ -49,7 +49,7 @@ class WPLMS_BadgeOS_Addon {
 	 * @var array
 	 */
 	public $triggers;
-	public $evaluate_triggers = array('badgeos_wplms_evaluate_course','badgeos_wplms_evaluate_quiz');
+	public $evaluate_triggers = array('badgeos_wplms_evaluate_course','badgeos_wplms_evaluate_quiz','badgeos_wplms_evaluate_assignment');
 	/**
 	 * Actions to forward for splitting an action up
 	 *
@@ -341,10 +341,7 @@ class WPLMS_BadgeOS_Addon {
 				if ( is_array( $trigger_label ) ) {
 					$triggers = $trigger_label;
 					foreach ( $triggers as $trigger_hook => $trigger_name ) {
-						if(!in_array($trigger_hook,$this->evaluate_triggers))
-							add_action( $trigger_hook, array($this,'badgeos_wplms_trigger_event'), 10, 20 );
-						else
-							add_action( $trigger_hook, array($this,'badgeos_wplms_trigger_evaluate_event'), 10, 20 );
+						add_action( $trigger_hook, array($this,'badgeos_wplms_trigger_event'), 10, 20 );
 					}
 				}else {
 					add_action( $trigger, array($this,'badgeos_wplms_trigger_event'), 10, 20 );
@@ -364,31 +361,33 @@ class WPLMS_BadgeOS_Addon {
 		
 		// Setup all our important variables
 		global $blog_id, $wpdb;
+		
+		$args = func_get_args();
+
 		$userID = get_current_user_id();
-	
-		// Grab the current trigger
-		$this_trigger = current_filter();
 
-		// Update hook count for this user
-		$new_count = badgeos_update_user_trigger_count( $userID, $this_trigger, $blog_id );
-
-		// Mark the count in the log entry
-		badgeos_post_log_entry( null, $userID, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'vibe' ), $user_data->user_login, $this_trigger, $new_count ) );
-
-		// Now determine if any badges are earned based on this trigger event
-		$triggered_achievements = $wpdb->get_results( $wpdb->prepare( "
-			SELECT post_id
-			FROM   $wpdb->postmeta
-			WHERE  meta_key = '_badgeos_course_activity'
-					AND meta_value = %s
-			", $this_trigger ) );
-
-		foreach ( $triggered_achievements as $achievement ) {
-			badgeos_maybe_award_achievement_to_user( $achievement->post_id, $userID, $this_trigger, $blog_id, $args );
+		if ( is_array( $args ) && isset( $args[ 'user' ] ) ) {
+			if ( is_object( $args[ 'user' ] ) ) {
+				$userID = (int) $args[ 'user' ]->ID;
+			}
+			else {
+				$userID = (int) $args[ 'user' ];
+			}
 		}
-	}
-	function badgeos_wplms_trigger_evaluate_event($a,$b,$userID){
-		global $blog_id, $wpdb;
+
+		if ( empty( $userID ) ) {
+			return;
+		}
+		if(isset($args[2]) && is_numeric($args[2]))
+			$userID = $args[2];
+
+
+		$user_data = get_user_by( 'id', $userID );
+
+		if ( empty( $user_data ) ) {
+			return;
+		}
+
 		// Grab the current trigger
 		$this_trigger = current_filter();
 
@@ -449,6 +448,7 @@ class WPLMS_BadgeOS_Addon {
 				break;
 				case 'badgeos_wplms_evaluate_course':
 				case 'badgeos_wplms_evaluate_quiz':
+				case 'badgeos_wplms_evaluate_assignment':
 					if(isset($args[0]) && $activity_id == $args[0]){
 						if(isset($args[1]) && $args[1] >= $activity_info){
 							$course_activity_trigger = true;
