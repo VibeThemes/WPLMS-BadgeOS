@@ -378,8 +378,14 @@ class WPLMS_BadgeOS_Addon {
 		if ( empty( $userID ) ) {
 			return;
 		}
-		if(isset($args[2]) && is_numeric($args[2]))
+
+		// Grab the current trigger
+		$this_trigger = current_filter();
+
+		if(in_array($this_trigger,array('badgeos_wplms_evaluate_course','badgeos_wplms_evaluate_quiz','badgeos_wplms_evaluate_assignment'))){
+			if(isset($args[2]) && is_numeric($args[2]))
 			$userID = $args[2];
+		}
 
 
 		$user_data = get_user_by( 'id', $userID );
@@ -388,8 +394,7 @@ class WPLMS_BadgeOS_Addon {
 			return;
 		}
 
-		// Grab the current trigger
-		$this_trigger = current_filter();
+		
 
 		// Update hook count for this user
 		$new_count = badgeos_update_user_trigger_count( $userID, $this_trigger, $blog_id );
@@ -439,12 +444,12 @@ class WPLMS_BadgeOS_Addon {
 				case 'badgeos_wplms_start_assignment':
 				case 'badgeos_wplms_submit_assignment':
 				case 'badgeos_wplms_unit_complete':
-					if(!in_array($course_activity,array('course_evaluated','quiz_evaluated','course_category'))){
-						if(isset($args[0]) && $activity_id == $args[0]){
-							$course_activity_trigger = true;
-							$requirements[ 'count' ] = 1; // Temp fix for count
-						}
+					
+					if(isset($args[0]) && $activity_id == $args[0]){
+						$course_activity_trigger = true;
+						$requirements[ 'count' ] = 1; // Temp fix for count
 					}
+					
 				break;
 				case 'badgeos_wplms_evaluate_course':
 				case 'badgeos_wplms_evaluate_quiz':
