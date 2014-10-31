@@ -472,6 +472,8 @@ class WPLMS_BadgeOS_Addon {
 				// Exceed the required number of checkins, they deserve the step
 				if ( 1 == $requirements[ 'count' ] || $requirements[ 'count' ] <= $trigger_count ) {
 					$return = true;
+					if(function_exists('badgeos_post_log_entry'))
+					badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), bp_core_get_username($user_id), $this_trigger, $trigger_count ) );
 				}
 			}
 		}
