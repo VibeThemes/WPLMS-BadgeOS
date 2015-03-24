@@ -4,7 +4,7 @@
  * Plugin URI: http://www.vibethemes.com/
  * Description: Integrates BadgeOS with WPLMS
  * Author: VibeThemes
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author URI: https://vibethemes.com/
  * License: GNU AGPLv3
  * License URI: http://www.gnu.org/licenses/agpl-3.0.html
@@ -445,9 +445,14 @@ class WPLMS_BadgeOS_Addon {
 				case 'badgeos_wplms_submit_assignment':
 				case 'badgeos_wplms_unit_complete':
 					
-					if(isset($args[0]) && $activity_id == $args[0]){
-						$course_activity_trigger = true;
-						$requirements[ 'count' ] = 1; // Temp fix for count
+					if(isset($args[0])){
+						if(isset($activity_id) && is_numeric($activity_id) && $activity_id == $args[0]){
+							$course_activity_trigger = true;
+							$requirements[ 'count' ] = 1; // Temp fix for count
+						}else{
+							$course_activity_trigger = true;
+							$requirements[ 'count' ] = 1; // Temp fix for count
+						}
 					}
 					
 				break;
@@ -455,9 +460,16 @@ class WPLMS_BadgeOS_Addon {
 				case 'badgeos_wplms_evaluate_quiz':
 				case 'badgeos_wplms_evaluate_assignment':
 					if(isset($args[0]) && $activity_id == $args[0]){
-						if(isset($args[1]) && $args[1] >= $activity_info){
-							$course_activity_trigger = true;
-							$requirements[ 'count' ] = 1;
+						if(isset($activity_id) && is_numeric($activity_id) && $activity_id == $args[0]){
+							if(isset($args[1]) && $args[1] >= $activity_info){
+								$course_activity_trigger = true;
+								$requirements[ 'count' ] = 1;
+							}
+						}else{
+							if(isset($args[1]) && $args[1] >= $activity_info){
+								$course_activity_trigger = true;
+								$requirements[ 'count' ] = 1;
+							}
 						}
 					}
 				break;
