@@ -444,14 +444,16 @@ class WPLMS_BadgeOS_Addon {
 				case 'badgeos_wplms_start_assignment':
 				case 'badgeos_wplms_submit_assignment':
 				case 'badgeos_wplms_unit_complete':
-					
+
 					if(isset($args[0])){
 						if(isset($activity_id) && is_numeric($activity_id) && $activity_id == $args[0]){
 							$course_activity_trigger = true;
 							$requirements[ 'count' ] = 1; // Temp fix for count
 						}else{
-							$course_activity_trigger = true;
-							$requirements[ 'count' ] = 1; // Temp fix for count
+							if(!is_numeric($activity_id)){
+								$course_activity_trigger = true;
+								$requirements[ 'count' ] = 1;
+							}
 						}
 					}
 					
