@@ -498,6 +498,7 @@ class WPLMS_BadgeOS_Addon {
 	/* ===== End Custom Achievement Functions ==== */
 	function badgeos_wplms_register_script(){
 		wp_enqueue_script('wplms_badgeos-js',$this->directory_url.'/js/wplms_badgeos.js',array('badgeos-admin-js'));
+		echo '<style>.select2-display-none { position: absolute; z-index: 9999999 !important; }</style>';
 	}
 } /* BadgeOS_Addon */
 
