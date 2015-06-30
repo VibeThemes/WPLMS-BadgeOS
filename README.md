@@ -22,11 +22,6 @@ Connect your WPLMS Learning management system with BadgeOS
 
 Visit the <a href="https://vibethemes.com/">VibeThemes</a> for documentation, support, and information on getting involved in the project.
 
-
-About WPLMS BadgeOS Add-on
-============
-This add-on provides the integration between BadgeOs and WPLMS.
-
 == REQUIREMENTS ==
 Minimum supported versions :
 WPLMS = 1.7.2+
@@ -85,5 +80,3 @@ Report bugs, suggest ideas, and participate in development at <a href="https://v
 
 = 1.0 =
 Initialise 1.0
-
-
