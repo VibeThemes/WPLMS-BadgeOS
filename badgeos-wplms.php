@@ -450,7 +450,7 @@ class WPLMS_BadgeOS_Addon {
 							$course_activity_trigger = true;
 							$requirements[ 'count' ] = 1; // Temp fix for count
 						}else{
-							if(!is_numeric($activity_id)){
+							if(!is_numeric($activity_id) || !$activity_id){ 
 								$course_activity_trigger = true;
 								$requirements[ 'count' ] = 1;
 							}
