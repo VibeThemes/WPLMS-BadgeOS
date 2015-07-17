@@ -20,6 +20,13 @@
  *
  * @since 1.0.0
  */
+
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 class WPLMS_BadgeOS_Addon {
 
 	/**
@@ -49,7 +56,7 @@ class WPLMS_BadgeOS_Addon {
 	 * @var array
 	 */
 	public $triggers;
-	public $evaluate_triggers = array('badgeos_wplms_evaluate_course','badgeos_wplms_evaluate_quiz','badgeos_wplms_evaluate_assignment');
+	public $evaluate_triggers = array('wplms_evaluate_course','wplms_evaluate_quiz','wplms_evaluate_assignment');
 	/**
 	 * Actions to forward for splitting an action up
 	 *
@@ -69,21 +76,21 @@ class WPLMS_BadgeOS_Addon {
 		$this->directory_url  = plugins_url( dirname( $this->basename ) );
 		$this->triggers = array(
 			'course' => array(
-				'badgeos_wplms_start_course' => __('Start Course','vibe'),
-				'badgeos_wplms_submit_course' => __('Finish Course','vibe'),
-				'badgeos_wplms_evaluate_course' => __('Marks in Course greater than ','vibe'),
+				'wplms_start_course' => __('Start Course','vibe'),
+				'wplms_submit_course' => __('Finish Course','vibe'),
+				'wplms_evaluate_course' => __('Marks in Course greater than ','vibe'),
 				),
 			'quiz' => array(
-				'badgeos_wplms_start_quiz' => __('Start Quiz','vibe'),
-				'badgeos_wplms_submit_quiz' => __('Finish Quiz','vibe'),
-				'badgeos_wplms_evaluate_quiz' => __('Marks in Quiz greater than','vibe'),
+				'wplms_start_quiz' => __('Start Quiz','vibe'),
+				'wplms_submit_quiz' => __('Finish Quiz','vibe'),
+				'wplms_evaluate_quiz' => __('Marks in Quiz greater than','vibe'),
 				),
 			'assignment' => array(
-				'badgeos_wplms_start_assignment' => __('Start Assignment','vibe'),
-				'badgeos_wplms_submit_assignment' => __('Finish Assignment','vibe'),
+				'wplms_start_assignment' => __('Start Assignment','vibe'),
+				'wplms_submit_assignment' => __('Finish Assignment','vibe'),
 				),
 			'unit' => array(
-				'badgeos_wplms_unit_complete' => __('Complete a Unit','vibe'),
+				'wplms_unit_complete' => __('Complete a Unit','vibe'),
 				),
 			);
 		// Load translations
@@ -109,7 +116,7 @@ class WPLMS_BadgeOS_Addon {
 		
 		/*== RULE ENGINE Custom Achievement Earning Rules ====*/
 		add_filter( 'user_deserves_achievement', array($this,'badgeos_wplms_user_deserves_wplms_step'), 15, 6 );
-	} /* __construct() */
+	} 
 
 
 	/**
@@ -275,7 +282,7 @@ class WPLMS_BadgeOS_Addon {
 						$title = sprintf( __( 'Completed Course "%s"', 'vibe' ), get_the_title( $activity_id ) );
 					}
 				break;
-				case 'badgeos_wplms_evaluate_course':
+				case 'evaluate_course':
 					if ( empty( $activity_id ) ) {
 						$title = __( 'Marks in any Course greater than', 'vibe' );
 					}else {
@@ -296,7 +303,7 @@ class WPLMS_BadgeOS_Addon {
 						$title = sprintf( __( 'Completed Quiz "%s"', 'vibe' ), get_the_title( $activity_id ) );
 					}
 				break;
-				case 'badgeos_wplms_evaluate_quiz':
+				case 'evaluate_quiz':
 					if ( empty( $activity_id ) ) {
 						$title = __( 'Marks in any Quiz greater than', 'vibe' );
 					}else {
@@ -317,7 +324,7 @@ class WPLMS_BadgeOS_Addon {
 						$title = sprintf( __( 'Completed Assignment "%s"', 'vibe' ), get_the_title( $activity_id ) );
 					}
 				break;
-				case 'badgeos_wplms_evaluate_assignment':
+				case 'evaluate_assignment':
 					if ( empty( $activity_id ) ) {
 						$title = __( 'Marks in any Assignment greater than', 'vibe' );
 					}else {
@@ -382,7 +389,7 @@ class WPLMS_BadgeOS_Addon {
 		// Grab the current trigger
 		$this_trigger = current_filter();
 
-		if(in_array($this_trigger,array('badgeos_wplms_evaluate_course','badgeos_wplms_evaluate_quiz','badgeos_wplms_evaluate_assignment'))){
+		if(in_array($this_trigger,array('wplms_evaluate_course','wplms_evaluate_quiz','wplms_evaluate_assignment'))){
 			if(isset($args[2]) && is_numeric($args[2]))
 			$userID = $args[2];
 		}
@@ -437,13 +444,13 @@ class WPLMS_BadgeOS_Addon {
 			// Extra arg handling for further expansion
 
 			switch($this_trigger){
-				case 'badgeos_wplms_start_course':
-				case 'badgeos_wplms_submit_course':
-				case 'badgeos_wplms_start_quiz':
-				case 'badgeos_wplms_submit_quiz':
-				case 'badgeos_wplms_start_assignment':
-				case 'badgeos_wplms_submit_assignment':
-				case 'badgeos_wplms_unit_complete':
+				case 'wplms_start_course':
+				case 'wplms_submit_course':
+				case 'wplms_start_quiz':
+				case 'wplms_submit_quiz':
+				case 'wplms_start_assignment':
+				case 'wplms_submit_assignment':
+				case 'wplms_unit_complete':
 
 					if(isset($args[0])){
 						if(isset($activity_id) && is_numeric($activity_id) && $activity_id == $args[0]){
@@ -458,22 +465,24 @@ class WPLMS_BadgeOS_Addon {
 					}
 					
 				break;
-				case 'badgeos_wplms_evaluate_course':
-				case 'badgeos_wplms_evaluate_quiz':
-				case 'badgeos_wplms_evaluate_assignment':
-					if(isset($args[0]) && $activity_id == $args[0]){
-						if(isset($activity_id) && is_numeric($activity_id) && $activity_id == $args[0]){
-							if(isset($args[1]) && $args[1] >= $activity_info){
-								$course_activity_trigger = true;
-								$requirements[ 'count' ] = 1;
-							}
-						}else{
-							if(isset($args[1]) && $args[1] >= $activity_info){
-								$course_activity_trigger = true;
-								$requirements[ 'count' ] = 1;
-							}
+				case 'wplms_evaluate_course':
+				case 'wplms_evaluate_quiz':
+				case 'wplms_evaluate_assignment':
+				        
+					
+					if(isset($activity_id) && is_numeric($activity_id) && $activity_id == $args[0]){
+						if(isset($args[1]) && $args[1] >= $activity_info){
+							$course_activity_trigger = true;
+							$requirements[ 'count' ] = 1;
+						}
+					}else{
+
+						if(isset($args[1]) && $args[1] >= $activity_info){
+							$course_activity_trigger = true;
+							$requirements[ 'count' ] = 1;
 						}
 					}
+				 
 				break;
 				default: 
 					$course_activity_trigger = false;
@@ -498,7 +507,6 @@ class WPLMS_BadgeOS_Addon {
 	/* ===== End Custom Achievement Functions ==== */
 	function badgeos_wplms_register_script(){
 		wp_enqueue_script('wplms_badgeos-js',$this->directory_url.'/js/wplms_badgeos.js',array('badgeos-admin-js'));
-		echo '<style>.select2-display-none { position: absolute; z-index: 9999999 !important; }</style>';
 	}
 } /* BadgeOS_Addon */
 

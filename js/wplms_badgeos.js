@@ -27,7 +27,9 @@ $("#_badgeos_earned_by").change( function() {
 $('.select-course-activity').hide();
 $('.input-activity-id').hide();
 $('.input-activity-info').hide();
-$( document ).on( 'change', '.select-trigger-type', function() {
+
+
+$( '.select-trigger-type' ).on( 'change', function(event) {
 
 	var trigger_type = $(this);
 
@@ -42,12 +44,12 @@ $( document ).on( 'change', '.select-trigger-type', function() {
 
 });
 // Listen for our change to our trigger type selector
-$( document ).on( 'change', '.select-course-activity', function() {
+$( '.select-course-activity' ).on( 'change', function() {
 
 	var trigger_type = $(this);
 
 	// Show our group selector if we're awarding based on a specific group
-	if ( 'badgeos_wplms_evaluate_course' == trigger_type.val() || 'badgeos_wplms_evaluate_quiz' == trigger_type.val() || 'badgeos_wplms_evaluate_assignment' == trigger_type.val() ) {
+	if ( 'wplms_evaluate_course' == trigger_type.val() || 'wplms_evaluate_quiz' == trigger_type.val() || 'wplms_evaluate_assignment' == trigger_type.val() ) {
 		trigger_type.siblings('.input-activity-info').show();
 	} else {
 		trigger_type.siblings('.input-activity-info').hide();
