@@ -491,8 +491,7 @@ class WPLMS_BadgeOS_Addon {
 					badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), bp_core_get_username($user_id), $this_trigger, $trigger_count ) );
 				}
 			}
-		}
-
+		} 
 		return $return;
 	}
 
