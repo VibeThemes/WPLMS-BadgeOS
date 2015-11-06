@@ -386,7 +386,7 @@ class WPLMS_BadgeOS_Addon {
 			return;
 		}
 
-		// Grab the current trigger
+		// Grab the current trigger 
 		$this_trigger = current_filter();
 
 		if(in_array($this_trigger,array('wplms_evaluate_course','wplms_evaluate_quiz','wplms_evaluate_assignment'))){
@@ -423,12 +423,14 @@ class WPLMS_BadgeOS_Addon {
 	}
 	function badgeos_wplms_user_deserves_wplms_step( $return, $user_id, $achievement_id, $this_trigger = '', $site_id = 1, $args = array() ) {
 
+		
 		// If we're not dealing with a step, bail here
 		if ( 'step' != get_post_type( $achievement_id ) ) {
 			return $return;
 		}
 
 		$requirements = badgeos_get_step_requirements( $achievement_id );
+
 
 		if ( 'course_activity' == $requirements[ 'trigger_type' ] ) {
 			// Do not pass go until we say you can
@@ -455,11 +457,9 @@ class WPLMS_BadgeOS_Addon {
 					if(isset($args[0])){
 						if(isset($activity_id) && is_numeric($activity_id) && $activity_id == $args[0]){
 							$course_activity_trigger = true;
-							$requirements[ 'count' ] = 1; // Temp fix for count
 						}else{
-							if(!is_numeric($activity_id) || !$activity_id){ 
+							if(!is_numeric($activity_id) || empty($activity_id)){ 
 								$course_activity_trigger = true;
-								$requirements[ 'count' ] = 1;
 							}
 						}
 					}
@@ -469,17 +469,9 @@ class WPLMS_BadgeOS_Addon {
 				case 'wplms_evaluate_quiz':
 				case 'wplms_evaluate_assignment':
 				        
-					
 					if(isset($activity_id) && is_numeric($activity_id) && $activity_id == $args[0]){
 						if(isset($args[1]) && $args[1] >= $activity_info){
 							$course_activity_trigger = true;
-							$requirements[ 'count' ] = 1;
-						}
-					}else{
-
-						if(isset($args[1]) && $args[1] >= $activity_info){
-							$course_activity_trigger = true;
-							$requirements[ 'count' ] = 1;
 						}
 					}
 				 
