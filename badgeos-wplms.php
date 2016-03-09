@@ -4,8 +4,9 @@
  * Plugin URI: http://www.vibethemes.com/
  * Description: Integrates BadgeOS with WPLMS
  * Author: VibeThemes
- * Version: 1.3
+ * Version: 1.3.1
  * Author URI: https://vibethemes.com/
+ * Text Domain: badgeos-wplms
  * License: GNU AGPLv3
  * License URI: http://www.gnu.org/licenses/agpl-3.0.html
  */
@@ -76,21 +77,22 @@ class WPLMS_BadgeOS_Addon {
 		$this->directory_url  = plugins_url( dirname( $this->basename ) );
 		$this->triggers = array(
 			'course' => array(
-				'wplms_start_course' => __('Start Course','vibe'),
-				'wplms_submit_course' => __('Finish Course','vibe'),
-				'wplms_evaluate_course' => __('Marks in Course greater than ','vibe'),
+				'wplms_start_course' => __('Start Course','badgeos-wplms'),
+				'wplms_submit_course' => __('Finish Course','badgeos-wplms'),
+				'wplms_evaluate_course' => __('Marks in Course greater than (+30) Or Less than (-30) OR Range (30-70)','badgeos-wplms'),
 				),
 			'quiz' => array(
-				'wplms_start_quiz' => __('Start Quiz','vibe'),
-				'wplms_submit_quiz' => __('Finish Quiz','vibe'),
-				'wplms_evaluate_quiz' => __('Marks in Quiz greater than','vibe'),
+				'wplms_start_quiz' => __('Start Quiz','badgeos-wplms'),
+				'wplms_submit_quiz' => __('Finish Quiz','badgeos-wplms'),
+				'wplms_evaluate_quiz' => __('Marks in Quiz greater than (+30) Or Less than (-30) OR Range (30-70)','badgeos-wplms'),
 				),
 			'assignment' => array(
-				'wplms_start_assignment' => __('Start Assignment','vibe'),
-				'wplms_submit_assignment' => __('Finish Assignment','vibe'),
+				'wplms_start_assignment' => __('Start Assignment','badgeos-wplms'),
+				'wplms_submit_assignment' => __('Finish Assignment','badgeos-wplms'),
+				'wplms_evaluate_assignment' => __('Marks in Assignment greater than (+30) Or Less than (-30) OR Range (30-70)','badgeos-wplms'),
 				),
 			'unit' => array(
-				'wplms_unit_complete' => __('Complete a Unit','vibe'),
+				'wplms_unit_complete' => __('Complete a Unit','badgeos-wplms'),
 				),
 			);
 		// Load translations
@@ -192,7 +194,7 @@ class WPLMS_BadgeOS_Addon {
 		if ( ! $this->meets_requirements() ) {
 			// Display our error
 			echo '<div id="message" class="error">';
-			echo '<p>' . sprintf( __( 'BadgeOS Add-On requires BadgeOS and has been <a href="%s">deactivated</a>. Please install and activate BadgeOS and then reactivate this plugin.', 'vibe' ), admin_url( 'plugins.php' ) ) . '</p>';
+			echo '<p>' . sprintf( __( 'BadgeOS Add-On requires BadgeOS and has been <a href="%s">deactivated</a>. Please install and activate BadgeOS and then reactivate this plugin.', 'badgeos-wplms' ), admin_url( 'plugins.php' ) ) . '</p>';
 			echo '</div>';
 
 			// Deactivate our plugin
@@ -203,7 +205,7 @@ class WPLMS_BadgeOS_Addon {
 
 
 	function badgeos_wplms_activity_triggers($triggers){
-		$triggers['course_activity'] = __( 'Course Activity', 'vibe' );
+		$triggers['course_activity'] = __( 'Course Activity', 'badgeos-wplms' );
 		
 		return $triggers;
 	}
@@ -218,7 +220,7 @@ class WPLMS_BadgeOS_Addon {
 
 		// Setup our select input
 		echo '<select name="course_activity" class="select-course-activity">';
-		echo '<option value="">' . __( 'Select a Course Activity', 'vibe' ) . '</option>';
+		echo '<option value="">' . __( 'Select a Course Activity', 'badgeos-wplms' ) . '</option>';
 
 		// Loop through all of our community trigger groups
 		$current_selection = get_post_meta( $step_id, '_badgeos_course_activity', true );
@@ -254,8 +256,8 @@ class WPLMS_BadgeOS_Addon {
 		// Loop through all of our community trigger groups
 		$current_box1 = get_post_meta( $step_id, '_badgeos_course_activity_id', true );
 		$current_box2 = get_post_meta( $step_id, '_badgeos_course_activity_info', true );
-		echo '<input type="text" name="activity_id" class="input-activity-id" placeholder="'.__('Enter ID (Blank for any)','vibe').'"  value="'.$current_box1.'">';
-		echo '<input type="text" name="activity_info" class="input-activity-info" placeholder="'.__('Enter Marks','vibe').'" value="'.$current_box2.'">';
+		echo '<input type="text" name="activity_id" class="input-activity-id" placeholder="'.__('Enter ID (Blank for any)','badgeos-wplms').'"  value="'.$current_box1.'">';
+		echo '<input type="text" name="activity_info" class="input-activity-info" placeholder="'.__('Enter Marks','badgeos-wplms').'" value="'.$current_box2.'">';
 	}
 	function badgeos_wplms_save_step($title, $step_id, $step_data){
 		// If we're working on a WPLMS trigger
@@ -270,65 +272,80 @@ class WPLMS_BadgeOS_Addon {
 			switch($step_data[ 'course_activity' ]){
 				case 'start_course':
 					if ( empty( $activity_id ) ) {
-						$title = __( 'Start any Course', 'vibe' );
+						$title = __( 'Start any Course', 'badgeos-wplms' );
 					}else {
-						$title = sprintf( __( 'Started Course "%s"', 'vibe' ), get_the_title( $activity_id ) );
+						$title = sprintf( __( 'Started Course "%s"', 'badgeos-wplms' ), get_the_title( $activity_id ) );
 					}
 				break;
 				case 'submit_course':
 					if ( empty( $activity_id ) ) {
-						$title = __( 'Complete any Course', 'vibe' );
+						$title = __( 'Complete any Course', 'badgeos-wplms' );
 					}else {
-						$title = sprintf( __( 'Completed Course "%s"', 'vibe' ), get_the_title( $activity_id ) );
+						$title = sprintf( __( 'Completed Course "%s"', 'badgeos-wplms' ), get_the_title( $activity_id ) );
 					}
 				break;
 				case 'evaluate_course':
 					if ( empty( $activity_id ) ) {
-						$title = __( 'Marks in any Course greater than', 'vibe' );
+						$title = __( 'Marks in any Course greater than', 'badgeos-wplms' );
 					}else {
-						$title = sprintf( __( 'Marks in Course "%s" greater than "%s"', 'vibe' ), get_the_title( $activity_id ), $activity_info );
+						if(is_numeric($activity_info)){
+							if($activity_info >= 0){
+								$title = sprintf( __( 'Marks in Course "%s" greater than "%s"', 'badgeos-wplms' ), get_the_title( $activity_id ), $activity_info );
+							}else{
+								$activity_info = -1*$activity_info;
+								$title = sprintf( __( 'Marks in Course "%s" less than "%s"', 'badgeos-wplms' ), get_the_title( $activity_id ), $activity_info );
+							}
+						}else{
+							if(strpos($activity_info,'-') !== false){
+								$range = explode('-',$activity_info);
+								if(isset($args[1]) && $args[1] < $range[1] && $args[1] >= $range[0] ){
+									$title = sprintf( __( 'Marks in Course "%s" in range  "%s" and "%s"', 'badgeos-wplms' ), get_the_title( $activity_id ), $range[0],$range[1] );
+								}
+							}
+						}
+						
 					}
 				break;
 				case 'start_quiz':
 					if ( empty( $activity_id ) ) {
-						$title = __( 'Start any Quiz', 'vibe' );
+						$title = __( 'Start any Quiz', 'badgeos-wplms' );
 					}else {
-						$title = sprintf( __( 'Started Quiz "%s"', 'vibe' ), get_the_title( $activity_id ) );
+						$title = sprintf( __( 'Started Quiz "%s"', 'badgeos-wplms' ), get_the_title( $activity_id ) );
 					}
 				break;
 				case 'submit_quiz':
 					if ( empty( $activity_id ) ) {
-						$title = __( 'Complete any Quiz', 'vibe' );
+						$title = __( 'Complete any Quiz', 'badgeos-wplms' );
 					}else {
-						$title = sprintf( __( 'Completed Quiz "%s"', 'vibe' ), get_the_title( $activity_id ) );
+						$title = sprintf( __( 'Completed Quiz "%s"', 'badgeos-wplms' ), get_the_title( $activity_id ) );
 					}
 				break;
 				case 'evaluate_quiz':
 					if ( empty( $activity_id ) ) {
-						$title = __( 'Marks in any Quiz greater than', 'vibe' );
+						$title = __( 'Marks in any Quiz greater than', 'badgeos-wplms' );
 					}else {
-						$title = sprintf( __( 'Marks in Quiz "%s" greater than "%s"', 'vibe' ), get_the_title( $activity_id ), $activity_info );
+						$title = sprintf( __( 'Marks in Quiz "%s" greater than "%s"', 'badgeos-wplms' ), get_the_title( $activity_id ), $activity_info );
 					}
 				break;
 				case 'start_assignment':
 					if ( empty( $activity_id ) ) {
-						$title = __( 'Start any Assignment', 'vibe' );
+						$title = __( 'Start any Assignment', 'badgeos-wplms' );
 					}else {
-						$title = sprintf( __( 'Started Assignment "%s"', 'vibe' ), get_the_title( $activity_id ) );
+						$title = sprintf( __( 'Started Assignment "%s"', 'badgeos-wplms' ), get_the_title( $activity_id ) );
 					}
 				break;
 				case 'submit_assignment':
 					if ( empty( $activity_id ) ) {
-						$title = __( 'Complete any Assignment', 'vibe' );
+						$title = __( 'Complete any Assignment', 'badgeos-wplms' );
 					}else {
-						$title = sprintf( __( 'Completed Assignment "%s"', 'vibe' ), get_the_title( $activity_id ) );
+						$title = sprintf( __( 'Completed Assignment "%s"', 'badgeos-wplms' ), get_the_title( $activity_id ) );
 					}
 				break;
 				case 'evaluate_assignment':
 					if ( empty( $activity_id ) ) {
-						$title = __( 'Marks in any Assignment greater than', 'vibe' );
+						$title = __( 'Marks in any Assignment greater than', 'badgeos-wplms' );
 					}else {
-						$title = sprintf( __( 'Marks in Assignment "%s" greater than "%s"', 'vibe' ), get_the_title( $activity_id ), $activity_info );
+						$title = sprintf( __( 'Marks in Assignment "%s" greater than "%s"', 'badgeos-wplms' ), get_the_title( $activity_id ), $activity_info );
 					}
 				break;
 			} 
@@ -407,7 +424,7 @@ class WPLMS_BadgeOS_Addon {
 		$new_count = badgeos_update_user_trigger_count( $userID, $this_trigger, $blog_id );
 
 		// Mark the count in the log entry
-		badgeos_post_log_entry( null, $userID, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'vibe' ), $user_data->user_login, $this_trigger, $new_count ) );
+		badgeos_post_log_entry( null, $userID, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos-wplms' ), $user_data->user_login, $this_trigger, $new_count ) );
 
 		// Now determine if any badges are earned based on this trigger event
 		$triggered_achievements = $wpdb->get_results( $wpdb->prepare( "
@@ -470,8 +487,24 @@ class WPLMS_BadgeOS_Addon {
 				case 'wplms_evaluate_assignment':
 				        
 					if(isset($activity_id) && is_numeric($activity_id) && $activity_id == $args[0]){
-						if(isset($args[1]) && $args[1] >= $activity_info){
-							$course_activity_trigger = true;
+						if(is_numeric($activity_info)){
+							if($activity_info >= 0 ){
+								if(isset($args[1]) && $args[1] >= $activity_info){
+									$course_activity_trigger = true;
+								}
+							}else{
+								$activity_info = -1*$activity_info;
+								if(isset($args[1]) && $args[1] < $activity_info){
+									$course_activity_trigger = true;
+								}
+							}
+						}else{
+							if(strpos($activity_info,'-') !== false){
+								$range = explode('-',$activity_info);
+								if(isset($args[1]) && $args[1] < $range[1] && $args[1] >= $range[0] ){
+									$course_activity_trigger = true;
+								}
+							}
 						}
 					}
 				 
