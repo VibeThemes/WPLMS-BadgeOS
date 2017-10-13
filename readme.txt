@@ -84,6 +84,9 @@ Report bugs, suggest ideas, and participate in development at <a href="https://v
 
 
 == Upgrade Notice ==
+= 1.4 =
+pot file updated
+
 = 1.2 =
 Fixes for WPLMS version 1.9.6+
 

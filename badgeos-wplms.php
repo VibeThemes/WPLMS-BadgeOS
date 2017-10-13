@@ -4,7 +4,7 @@
  * Plugin URI: http://www.vibethemes.com/
  * Description: Integrates BadgeOS with WPLMS
  * Author: VibeThemes
- * Version: 1.3.1
+ * Version: 1.4
  * Author URI: https://vibethemes.com/
  * Text Domain: badgeos-wplms
  * License: GNU AGPLv3
