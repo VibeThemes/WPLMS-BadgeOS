@@ -1,0 +1,181 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Vibe Course Module\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-13 15:35+0530\n"
+"PO-Revision-Date: 2017-07-21 13:26+0530\n"
+"Last-Translator: vibethemes@gmail.com <vibethemes@gmail.com>\n"
+"Language-Team: vibethemes <vibethemes@gmail.com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 2.0.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: badgeos-wplms.php:80
+msgid "Start Course"
+msgstr ""
+
+#: badgeos-wplms.php:81
+msgid "Finish Course"
+msgstr ""
+
+#: badgeos-wplms.php:82
+msgid "Marks in Course greater than (+30) Or Less than (-30) OR Range (30-70)"
+msgstr ""
+
+#: badgeos-wplms.php:85
+msgid "Start Quiz"
+msgstr ""
+
+#: badgeos-wplms.php:86
+msgid "Finish Quiz"
+msgstr ""
+
+#: badgeos-wplms.php:87
+msgid "Marks in Quiz greater than (+30) Or Less than (-30) OR Range (30-70)"
+msgstr ""
+
+#: badgeos-wplms.php:90
+msgid "Start Assignment"
+msgstr ""
+
+#: badgeos-wplms.php:91
+msgid "Finish Assignment"
+msgstr ""
+
+#: badgeos-wplms.php:92
+msgid ""
+"Marks in Assignment greater than (+30) Or Less than (-30) OR Range (30-70)"
+msgstr ""
+
+#: badgeos-wplms.php:95
+msgid "Complete a Unit"
+msgstr ""
+
+#: badgeos-wplms.php:197
+#, php-format
+msgid ""
+"BadgeOS Add-On requires BadgeOS and has been <a href=\"%s\">deactivated</a>. "
+"Please install and activate BadgeOS and then reactivate this plugin."
+msgstr ""
+
+#: badgeos-wplms.php:208
+msgid "Course Activity"
+msgstr ""
+
+#: badgeos-wplms.php:223
+msgid "Select a Course Activity"
+msgstr ""
+
+#: badgeos-wplms.php:259
+msgid "Enter ID (Blank for any)"
+msgstr ""
+
+#: badgeos-wplms.php:260
+msgid "Enter Marks"
+msgstr ""
+
+#: badgeos-wplms.php:275
+msgid "Start any Course"
+msgstr ""
+
+#: badgeos-wplms.php:277
+#, php-format
+msgid "Started Course \"%s\""
+msgstr ""
+
+#: badgeos-wplms.php:282
+msgid "Complete any Course"
+msgstr ""
+
+#: badgeos-wplms.php:284
+#, php-format
+msgid "Completed Course \"%s\""
+msgstr ""
+
+#: badgeos-wplms.php:289
+msgid "Marks in any Course greater than"
+msgstr ""
+
+#: badgeos-wplms.php:293
+#, php-format
+msgid "Marks in Course \"%s\" greater than \"%s\""
+msgstr ""
+
+#: badgeos-wplms.php:296
+#, php-format
+msgid "Marks in Course \"%s\" less than \"%s\""
+msgstr ""
+
+#: badgeos-wplms.php:302
+#, php-format
+msgid "Marks in Course \"%s\" in range  \"%s\" and \"%s\""
+msgstr ""
+
+#: badgeos-wplms.php:311
+msgid "Start any Quiz"
+msgstr ""
+
+#: badgeos-wplms.php:313
+#, php-format
+msgid "Started Quiz \"%s\""
+msgstr ""
+
+#: badgeos-wplms.php:318
+msgid "Complete any Quiz"
+msgstr ""
+
+#: badgeos-wplms.php:320
+#, php-format
+msgid "Completed Quiz \"%s\""
+msgstr ""
+
+#: badgeos-wplms.php:325
+msgid "Marks in any Quiz greater than"
+msgstr ""
+
+#: badgeos-wplms.php:327
+#, php-format
+msgid "Marks in Quiz \"%s\" greater than \"%s\""
+msgstr ""
+
+#: badgeos-wplms.php:332
+msgid "Start any Assignment"
+msgstr ""
+
+#: badgeos-wplms.php:334
+#, php-format
+msgid "Started Assignment \"%s\""
+msgstr ""
+
+#: badgeos-wplms.php:339
+msgid "Complete any Assignment"
+msgstr ""
+
+#: badgeos-wplms.php:341
+#, php-format
+msgid "Completed Assignment \"%s\""
+msgstr ""
+
+#: badgeos-wplms.php:346
+msgid "Marks in any Assignment greater than"
+msgstr ""
+
+#: badgeos-wplms.php:348
+#, php-format
+msgid "Marks in Assignment \"%s\" greater than \"%s\""
+msgstr ""
+
+#: badgeos-wplms.php:427 badgeos-wplms.php:524
+#, php-format
+msgid "%1$s triggered %2$s (%3$dx)"
+msgstr ""
